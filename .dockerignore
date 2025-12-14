@@ -1,0 +1,7 @@
+# Security: Do not copy secrets to image
+.env
+.env.example
+.git
+.venv
+__pycache__
+faiss_index
