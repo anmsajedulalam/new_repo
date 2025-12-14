@@ -94,66 +94,56 @@ if prompt := st.chat_input("What would you like to know?"):
             "messages": [HumanMessage(content=prompt)]
         }
         
-        # Async loop helper for Streamlit
-        import asyncio
-        
-        async def process_stream():
-            full_ans = ""
+        # Synchronous Node-level Streaming (Reliable fallback)
+        try:
             status_text = "Starting..."
             status_placeholder.status(status_text, expanded=True)
             
-            # Using astream_events to catch tokens and node transitions
-            # version="v2" is recommended for newer langchain
-            try:
-                msg_count = 0
-                async for event in app.astream_events(inputs, config=thread_config, version="v2"):
-                    kind = event["event"]
-                    
-                    # 1. Update Status based on Node usage
-                    if kind == "on_chain_start":
-                        name = event["name"]
-                        if name == "retrieve":
-                            status_placeholder.markdown("🔍 **Retrieving documents...**")
-                        elif name == "grade_documents":
-                            status_placeholder.markdown("⚖️ **Grading relevance...**")
-                        elif name == "web_search":
-                            status_placeholder.markdown("🌐 **Searching the web...**")
-                        elif name == "transform_query":
-                            status_placeholder.markdown("🤔 **Refining query...**")
-                        elif name == "generate":
-                            status_placeholder.markdown("✍️ **Generating answer...**")
-                            
-                    # 2. Stream Tokens
-                    if kind == "on_chat_model_stream":
-                        # We only want to stream if we are in the 'generate' node roughly.
-                        # Sometimes grader also streams, but it's structured output so usually not 'on_chat_model_stream' with content?
-                        # Actually grader is structured output, so it might emit events but with parsed args.
-                        # We focus on content chunks.
-                        content = event["data"]["chunk"].content
-                        if content:
-                            full_ans += content
-                            message_placeholder.markdown(full_ans + "▌")
-                            
-                return full_ans
-                
-            except Exception as e:
-                st.error(f"Error during streaming: {e}")
-                return ""
-
-        # Run async loop
-        try:
-            final_answer = asyncio.run(process_stream())
+            full_ans = ""
             
+            # Use .stream() to get updates from each node
+            for output in app.stream(inputs, config=thread_config):
+                # output is like {'retrieve': {'documents': [...]}}
+                for key, value in output.items():
+                    if key == "router":
+                        status_placeholder.markdown("🚦 **Routing query...**")
+                    elif key == "general_conversation":
+                        status_placeholder.markdown("💬 **Chatting...**")
+                        if "messages" in value:
+                            final_msg = value["messages"][-1]
+                            full_ans = final_msg.content
+                            message_placeholder.markdown(full_ans)
+                    elif key == "handle_blocked":
+                        status_placeholder.markdown("🚫 **Content Blocked**")
+                        if "messages" in value:
+                            final_msg = value["messages"][-1]
+                            full_ans = final_msg.content
+                            message_placeholder.markdown(full_ans)
+                    elif key == "retrieve":
+                        status_placeholder.markdown("🔍 **Retrieving documents...**")
+                    elif key == "grade_documents":
+                        status_placeholder.markdown("⚖️ **Grading relevance...**")
+                    elif key == "web_search":
+                        status_placeholder.markdown("🌐 **Searching the web...**")
+                    elif key == "transform_query":
+                        status_placeholder.markdown("🤔 **Refining query...**")
+                    elif key == "generate":
+                        status_placeholder.markdown("✍️ **Generating answer...**")
+                        # The generate node returns the final message update
+                        if "messages" in value:
+                            final_msg = value["messages"][-1]
+                            full_ans = final_msg.content
+                            message_placeholder.markdown(full_ans)
+                            
             # Final Cleanup
-            message_placeholder.markdown(final_answer)
-            status_placeholder.empty() # Clear status messages
+            if full_ans:
+                st.session_state.messages.append(AIMessage(content=full_ans))
+            status_placeholder.empty()
             
-            # Append to history
-            if final_answer:
-                st.session_state.messages.append(AIMessage(content=final_answer))
-                
         except Exception as e:
-            st.error(f"Fatal error: {e}")
+            st.error(f"An error occurred: {e}")
+            import traceback
+            traceback.print_exc()
 
 # Footer
 st.markdown("---")

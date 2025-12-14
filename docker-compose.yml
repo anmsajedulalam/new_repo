@@ -10,6 +10,8 @@ services:
       # Mount .env so we don't need to rebuild image to change keys
       # Make sure .env exists locally!
       - ./.env:/app/.env
+      # Mount source code for live debugging/updates
+      - .:/app
     environment:
       # Optional: Override env vars here if not using .env file
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}

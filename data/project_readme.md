@@ -106,28 +106,14 @@ When a user asks a question, the request enters a processing graph:
     ```
 
 ### Configuration
-
-**CRITICAL**: Security best practices have been enforced. Hardcoded keys have been removed from `config.py`.
-
-1.  **Create `.env` file**:
-    Create a file named `.env` in the root directory. You can use the provided `.env.example` as a template.
-    
-    ```bash
-    cp .env.example .env
-    ```
-
-2.  **Add your Secrets**:
-    Open `.env` and fill in your keys:
-    ```env
-    AZURE_OPENAI_API_KEY=your_key_here
-    AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-    AZURE_DEPLOYMENT_NAME=gpt-4o-mini
-    AZURE_EMBEDDING_DEPLOYMENT=text-embedding-ada-002
-    AZURE_OPENAI_API_VERSION=2024-08-01-preview
-    
-    # Optional: For Web Search
-    TAVILY_API_KEY=tvly-xxxxxxxxxxxx
-    ```
+    *   The `config.py` file handles environment variables.
+    *   Ensure your `.env` file (or environment) has the following keys (already pre-configured in this setup):
+        *   `AZURE_OPENAI_API_KEY`
+        *   `AZURE_OPENAI_ENDPOINT`
+        *   `AZURE_DEPLOYMENT_NAME` (e.g., `gpt-4o-mini`)
+        *   `AZURE_EMBEDDING_DEPLOYMENT` (e.g., `text-embedding-ada-002`)
+        *   `AZURE_EMBEDDING_DEPLOYMENT` (e.g., `text-embedding-ada-002`)
+        *   `TAVILY_API_KEY` (Required for fallback search. Get one at [tavily.com](https://tavily.com))
 
 ### Usage
 
@@ -201,16 +187,7 @@ To improve result quality and handle missing data:
     *   *Config*: Requires `TAVILY_API_KEY` in `config.py`. Skips gracefully if missing.
 
 ### ⚡ Real-time Token Streaming
-The Streamlit interface now supports **Real-time Status Updates** ("Retrieving...", "Grading...") and robust answer streaming, ensuring you always know what the agent is currently doing.
-
-### 💬 Smart Chitchat
-The agent now includes a **Router Node** that intelligently distinguishes between:
-*   **Domain Queries**: Uses RAG (e.g., "What is Project Omega?").
-*   **Casual Chat**: Handles greetings ("Hi", "Thanks") directly without searching the database, making interactions faster and more natural.
-
-### 🛡️ Robust Error Handling
-*   **Content Safety**: Automatically handles Azure's "Responsible AI" policy violations by gracefully informing the user instead of crashing.
-*   **Fallback Logic**: If the router fails, it safely defaults to general conversation.
+The Streamlit interface now supports **token-by-token streaming**, mimicking the "typing" effect of modern LLM applications. It also provides granular status updates (e.g., "Retrieving...", "Grading...") so you know exactly what the agent is doing at each step.
 
 ## 📊 Streamlit Dashboard & Deployment
 

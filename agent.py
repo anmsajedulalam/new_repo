@@ -30,10 +30,103 @@ class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], operator.add]
     documents: Sequence[str]
     question: str
+    route: str # New field for routing decision
 
 from langgraph.checkpoint.memory import MemorySaver
 
 # --- Nodes ---
+
+def router_node(state):
+    """
+    Route the user's query to either the vectorstore or general conversation.
+    """
+    print("---ROUTER---")
+    question = state["question"]
+    
+    llm = AzureChatOpenAI(
+        azure_deployment=config.AZURE_DEPLOYMENT_NAME,
+        openai_api_version=config.AZURE_OPENAI_API_VERSION,
+        azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+        api_key=config.AZURE_OPENAI_API_KEY,
+        temperature=0
+    )
+    
+    class RouteQuery(BaseModel):
+        """Route a user query to the most relevant datasource."""
+        datasource: Literal["vectorstore", "general"] = Field(
+            ...,
+            description="Given a user question choose to route it to web search or a vectorstore user question.",
+        )
+
+    structured_llm_router = llm.with_structured_output(RouteQuery)
+    
+    system = """You are an expert at routing a user question to a vectorstore or general conversation.
+    The vectorstore contains documents about specific domain knowledge (Company Policies, Project Omega, specific tech).
+    Use the vectorstore for questions on these topics.
+    For greetings ("hi", "hello"), compliments, casual chat ("how are you"), or simple acknowledgments ("ok", "thanks"), use 'general' conversation.
+    """
+    
+    route_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", system),
+            ("human", "{question}"),
+        ]
+    )
+    
+    router = route_prompt | structured_llm_router
+    try:
+        source = router.invoke({"question": question})
+        decision = source.datasource
+    except Exception as e:
+        # Fallback to general if parsing fails or content filter triggers
+        print(f"Router failed (possible content filter): {e}")
+        # If it's a content filter error, we should probably stop.
+        if "content_filter" in str(e) or "ResponsibleAIPolicyViolation" in str(e):
+            decision = "blocked"
+        else:
+            decision = "general"
+        
+    print(f"Routing to: {decision}")
+    return {"route": decision}
+
+def handle_blocked(state):
+    """
+    Handle content filter blocks gracefully.
+    """
+    print("---CONTENT BLOCKED---")
+    return {"messages": [AIMessage(content="I'm sorry, but I cannot answer that question as it triggered our content safety policies. Please ask something else.")]}
+
+def general_conversation(state):
+    """
+    Handle general conversation (chitchat) without RAG.
+    """
+    print("---GENERAL CONVERSATION---")
+    messages = state["messages"]
+    
+    llm = AzureChatOpenAI(
+        azure_deployment=config.AZURE_DEPLOYMENT_NAME,
+        openai_api_version=config.AZURE_OPENAI_API_VERSION,
+        azure_endpoint=config.AZURE_OPENAI_ENDPOINT,
+        api_key=config.AZURE_OPENAI_API_KEY,
+        temperature=0.7 # Slight creativity for chitchat
+    )
+    
+    # Simple prompt
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "You are a friendly and helpful AI assistant. Engage in polite conversation with the user. If they ask about specific topics you don't know, suggest they ask about the domain documents."),
+            ("placeholder", "{messages}"),
+        ]
+    )
+    
+    chain = prompt | llm
+    
+    # Trim history
+    messages_to_send = messages[-6:] if len(messages) > 6 else messages
+    
+    response = chain.invoke({"messages": messages_to_send})
+    return {"messages": [response]}
+
 
 def retrieve(state):
     """
@@ -224,19 +317,44 @@ def decide_to_generate(state):
         print("---DECISION: GENERATE---")
         return "generate"
 
+def decide_route(state):
+    """
+    Route based on router_node decision.
+    """
+    print(f"---DECISION: {state['route']}---")
+    return state["route"]
+
 # --- Graph Definition ---
 def build_graph():
     workflow = StateGraph(AgentState)
 
     # Define the nodes
+    workflow.add_node("router", router_node) # Entry point
+    workflow.add_node("general_conversation", general_conversation)
     workflow.add_node("retrieve", retrieve)
     workflow.add_node("grade_documents", grade_documents)
     workflow.add_node("generate", generate)
     workflow.add_node("transform_query", transform_query)
     workflow.add_node("web_search", web_search)
+    workflow.add_node("handle_blocked", handle_blocked)
 
     # Build graph
-    workflow.set_entry_point("retrieve")
+    workflow.set_entry_point("router")
+    
+    # Logic: Router -> (Vectorstore or General or Blocked)
+    workflow.add_conditional_edges(
+        "router",
+        decide_route,
+        {
+            "vectorstore": "retrieve",
+            "general": "general_conversation",
+            "blocked": "handle_blocked",
+        },
+    )
+    
+    workflow.add_edge("general_conversation", END)
+    workflow.add_edge("handle_blocked", END)
+    
     workflow.add_edge("retrieve", "grade_documents")
     
     # Conditional edge
