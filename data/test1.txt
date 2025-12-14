@@ -1,0 +1,10 @@
+SELISE is a global IT services organization that specializes in designing, implementing, and operating scalable, cloud-native digital platforms for various industries. They describe themselves as a developer of scalable software and a one-stop shop for business solutions. 
+Core Offerings and Products
+SELISE builds both custom enterprise platforms for clients and a suite of its own proprietary products: 
+SELISE Blocks: A composable application platform-as-a-service (aPaaS) that uses prebuilt functional modules ("blocks") to accelerate the development of enterprise-grade solutions.
+SELISE Signature: A secure, compliant e-signature platform that allows businesses to embed digital signing into their workflows, designed to meet high security standards like eIDAS and DSGVO.
+Ordermonkey: A platform aimed at streamlining the gastronomy industry through digital innovations, such as smart POS and data-driven loyalty programs.
+E-commerce Solutions: They provide solutions for building robust digital commerce platforms, including multi-store management and seamless integration with various sales channels, payment gateways, and inventory systems. Examples include their work with Läderach and Swiss-Ski.
+Industry-Specific Platforms: SELISE develops tailored solutions for various sectors, including Insurance & Banking, Telecom & Technology (e.g., CPQ and fleet management), Manufacturing & Engineering, and Retail & Services. 
+Operational Model
+The company focuses on combining agile, outcome-driven development with globally distributed talent across offices in locations such as Zürich, Dhaka, Dubai, Thimphu, Berlin, and Kathmandu. Their model emphasizes cost efficiency and long-term partnership by leveraging this global presence.

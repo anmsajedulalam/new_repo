@@ -1,0 +1,21 @@
+services:
+  agentic-rag:
+    build: .
+    container_name: agentic-rag-app
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./faiss_index:/app/faiss_index
+      # Mount .env so we don't need to rebuild image to change keys
+      # Make sure .env exists locally!
+      - ./.env:/app/.env
+    environment:
+      # Optional: Override env vars here if not using .env file
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      - AZURE_DEPLOYMENT_NAME=${AZURE_DEPLOYMENT_NAME:-gpt-4.1-mini}
+      - AZURE_EMBEDDING_DEPLOYMENT=${AZURE_EMBEDDING_DEPLOYMENT:-text-embedding-ada-002}
+      - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-2024-08-01-preview}
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
+    restart: unless-stopped

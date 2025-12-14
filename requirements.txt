@@ -1,0 +1,13 @@
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+python-dotenv
+tiktoken
+tavily-python
+langgraph
+pypdf
+openpyxl
+pandas
+streamlit
+watchdog

@@ -1,0 +1,22 @@
+SELISE Group is a global IT services and product company that specializes in designing, implementing, and operating scalable, cloud-native digital platforms. The organization, founded in Zurich and Dhaka in 2011, uses a "global-local" delivery model, leveraging a worldwide talent pool to provide cost-efficient, enterprise-grade solutions. 
+Core Offerings & Expertise
+SELISE focuses on a platform-based approach using modular architectures and AI/ML capabilities. 
+Proprietary Products:
+SELISE Blocks: A composable application platform-as-a-service (aPaaS) that uses prebuilt functional modules ("blocks") to accelerate the development of enterprise solutions.
+SELISE Signature: A secure, legally compliant e-signature platform that meets standards like eIDAS and DSGVO, allowing businesses to embed digital signing into their workflows.
+Ordermonkey: A platform for the gastronomy industry offering smart POS, omnichannel ordering, and data-driven loyalty programs.
+SELISE AdiNova: A comprehensive platform for financial advisors designed to streamline advisory processes and enhance client engagement. 
+Key Services:
+Consulting & User Experience (UX): Strategic guidance on business processes, system design, and digital transformations, including a dedicated UX Lab for user-centric design.
+Application Development: Building high-performing web and mobile applications, often utilizing cloud-native and microservices architectures.
+IT Operations & Staff Augmentation: Providing ongoing support, maintenance, and expert talent on demand to supplement in-house teams.
+Data & AI Solutions: Implementing AI/ML use cases such as predictive analytics, fraud detection, and recommendation engines. 
+Industry Specialization
+SELISE has developed deep vertical expertise in several key industries, delivering tailored, compliant solutions: 
+Insurance & Banking: Solutions for legacy modernization, secure onboarding (KYC, e-signatures), claims management, and compliance with financial regulations.
+Telecom & Technology: End-to-end Business Support System (BSS) solutions, including Configure-Price-Quote (CPQ) engines, fleet management, and self-care portals for clients like Sunrise UPC and Swisscom.
+Retail & Services: E-commerce platforms, point-of-sale systems, and customer engagement solutions for brands such as Läderach and Turm Kaffee.
+Manufacturing & Engineering: AI- and data-driven solutions for asset monitoring, system integration, and workflow automation. 
+Global Presence & Partnerships
+Headquartered in Zurich, Switzerland, SELISE operates globally with engineering and innovation hubs in Bangladesh (Dhaka), Bhutan, Germany (Berlin), Kosovo, UAE (Dubai), North America, and Nepal. They often collaborate with academic institutions and industry leaders, for instance, partnering with additiv on fintech opportunities and with Swiss-Ski as an official supporter. 
+More information can be found on the official SELISE Group website.

@@ -1,0 +1,20 @@
+Design, Implement, Operate
+SELISE Group is a global IT delivery organization specializing in the design, implementation, and operation of advanced technology solutions. Our worldwide team of digital consultants, UX designers, software engineers, and architects helps businesses streamline processes, transform customer experiences, and gain a competitive edge.
+
+We serve clients in the following industy verticals.
+
+Insurance & Banking: Digital solutions for banks and insurance companies, helping them scale securely and comply with industry regulations.
+Telecom & Technology: End-to-end digital transformation for communication service providers (CSPs) across their product portfolios.
+Manufacturing & Engineering: Robust platforms for manufacturers and engineers to optimize operations, improve quality, and drive innovation.
+Retail & Services: E-commerce, point-of-sale, and customer engagement solutions for retailers and service providers.
+We provide the following Centers of Excellence:
+
+Consulting: Strategic guidance on business processes, system design, and digital transformations.
+Sourcing: Access world-class talent with our managed delivery centers that offer multilingual teams in strategic global locations.
+Total Experience Lab: Modern, science-backed UX design to enhance the overall experience for customers, employees, and stakeholders.
+GenesisX: Empowering startups and corporations to build disruptive MVPs and scale them into market leaders.
+We offer CotS, Opensource and SaaS solutions in the following domains: 
+
+Ordermonkey: Streamlining the gastronomy industry through digital innovations that boost efficiency and customer satisfaction.
+Signature by SELISE: Highly customizable electronic signature solutions for faster, paperless workflows.
+SELISE Blocks: A comprehensive 360° IT delivery platform featuring code repositories, development guidelines, and cloud services.

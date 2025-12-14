@@ -1,0 +1,20 @@
+name: agentic-rag-1
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - langchain
+    - langchain-openai
+    - langchain-community
+    - faiss-cpu
+    - python-dotenv
+    - tiktoken
+    - tavily-python
+    - langgraph
+    - pypdf
+    - openpyxl
+    - pandas
+    - streamlit
+    - watchdog
