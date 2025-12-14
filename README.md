@@ -8,6 +8,12 @@ This project is a **Mini Agentic RAG (Retrieval-Augmented Generation) System** d
 4.  **Conversational Memory**: Remembers previous turns to answer follow-up questions (e.g., "When was it founded?").
 5.  **Token Optimization**: Strategies to minimize cost while maintaining performance.
 
+## Video Demo
+
+[![Watch the Demo](https://img.youtube.com/vi/hrWiqbaq2t4/0.jpg)](https://youtu.be/hrWiqbaq2t4)
+
+> **Click the image above to watch the video demo!**
+
 ## System Architecture
 
 The following diagram illustrates the high-level architecture and data flow:
