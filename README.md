@@ -15,23 +15,23 @@ The following diagram illustrates the high-level architecture and data flow:
 ```mermaid
 graph TD
     subgraph "Ingestion Pipeline"
-        Docs[Documents (PDF/Txt/MD)] --> Splitter[Text Splitter]
-        Splitter --> Chunks[Chunks]
-        Chunks --> Embed[Azure Embeddings]
-        Embed --> VectorDB[(FAISS Vector Store)]
+        Docs["Documents (PDF/Txt/MD)"] --> Splitter["Text Splitter"]
+        Splitter --> Chunks["Chunks"]
+        Chunks --> Embed["Azure Embeddings"]
+        Embed --> VectorDB[("FAISS Vector Store")]
     end
 
     subgraph "Agentic Inference Loop"
-        User(User Query) --> Agent[Agentic Graph]
-        Agent --> Retrieve(Retrieve Node)
+        User("User Query") --> Agent["Agentic Graph"]
+        Agent --> Retrieve("Retrieve Node")
         Retrieve -->|Query| VectorDB
         VectorDB -->|Context| Retrieve
-        Retrieve --> Grade(Grade Documents Node)
+        Retrieve --> Grade("Grade Documents Node")
         
         Grade -->|Relevance Check| Critic{Relevant?}
-        Critic -- No --> GiveUp[Response: 'No relevant info']
-        Critic -- Yes --> Generate(Generate Node)
-        Generate --> Final[Final Answer]
+        Critic -- No --> GiveUp["Response: 'No relevant info'"]
+        Critic -- Yes --> Generate("Generate Node")
+        Generate --> Final["Final Answer"]
     end
 ```
 
